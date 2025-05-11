@@ -1,5 +1,5 @@
-const fetch = require("node-fetch");
-const querystring = require("querystring");
+import fetch from 'node-fetch';
+import querystring from 'querystring';
 
 const basic = Buffer.from(`${process.env.SPOTIFY_CLIENT_ID}:${process.env.SPOTIFY_CLIENT_SECRET}`).toString("base64");
 
@@ -20,7 +20,7 @@ async function getAccessToken() {
   return data.access_token;
 }
 
-async function getTopTracks() {
+export async function getTopTracks() {
   const token = await getAccessToken();
   const res = await fetch("https://api.spotify.com/v1/me/top/tracks?limit=5", {
     headers: {
@@ -35,5 +35,3 @@ async function getTopTracks() {
     albumArt: track.album.images[0]?.url,
   }));
 }
-
-module.exports = { getTopTracks };

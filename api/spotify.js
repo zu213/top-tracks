@@ -1,6 +1,6 @@
-const { getTopTracks } = require("../utils/spotify");
+import { getTopTracks } from "../utils/spotify.js";
 
-module.exports = async function handler(req, res) {
+export default async function handler(req, res) {
   const tracks = await getTopTracks();
 
   const svg = `
