@@ -1,8 +1,10 @@
 import { getTopTracks } from "../utils/spotify.js";
+import fetch from "node-fetch";
 
 export default async function handler(req, res) {
   const tracks = await getTopTracks();
-
+  const base64Covers = await Promise.all(tracks.map(async (t) => await getAlbumImage(t.albumArt)));
+  
   const svg = `
     <svg width="400" height="${70 * tracks.length}" xmlns="http://www.w3.org/2000/svg">
       <defs>
@@ -30,7 +32,7 @@ export default async function handler(req, res) {
           const y = i * 70 + 40;
           return `
             <rect x="0" y="${y - 35}" width="400" height="60" fill="rgba(0, 0, 0, 0.04)" />
-            <image href="${track.albumArt}" x="10" y="${y - 30}" width="50" height="50" clip-path="url(#rounded${i})"/>
+            <image href="data:image/jpeg;base64,${base64Covers[i]}" x="10" y="${y - 30}" width="50" height="50" clip-path="url(#rounded${i})"/>
             <text x="70" y="${y}" class="text">${track.name} — ${track.artist}</text>
           `;
         })
@@ -42,3 +44,9 @@ export default async function handler(req, res) {
   res.setHeader("Cache-Control", "s-maxage=3600, stale-while-revalidate");
   res.send(svg);
 };
+
+async function getAlbumImage(imageUrl) {
+  const res = await fetch(imageUrl);
+  const buffer = await res.buffer();
+  return buffer.toString('base64');
+}
