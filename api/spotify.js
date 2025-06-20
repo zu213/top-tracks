@@ -24,7 +24,7 @@ export default async function handler(req, res) {
       })}
       </defs>
       <style>
-        .text { font: 16px "Segoe UI", "Helvetica Neue", "Arial", sans-serif; fill:  rgb(210, 210, 210); font-weight: 550; text-rendering: optimizeLegibility; }
+        .text { font: 15px "Segoe UI", "Helvetica Neue", "Arial", sans-serif; fill:  rgb(210, 210, 210); font-weight: 550; text-rendering: optimizeLegibility; }
         .bigText { font-size: 22px; text-decoration: underline; }
       </style>
       <rect width="100%" height="100%" fill="url(#bgGradient)" rx="15"/>
@@ -34,10 +34,14 @@ export default async function handler(req, res) {
       ${tracks
         .map((track, i) => {
           const y = i * 70 + 90;
+          var text = `${track.name} — ${track.artist}`;
+          if(text.length > 45) {
+            text = text.substring(0, 42) + '...';
+          }
           return `
             <rect x="0" y="${y - 35}" width="400" height="60" fill="rgba(0, 0, 0, 0.04)" />
             <image href="data:image/jpeg;base64,${base64Covers[i]}" x="10" y="${y - 30}" width="50" height="50" clip-path="url(#rounded${i})"/>
-            <text x="70" y="${y}" class="text">${track.name} — ${track.artist}</text>
+            <text x="70" y="${y}" class="text">${text}</text>
           `;
         })
         .join("")}
