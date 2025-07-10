@@ -34,9 +34,9 @@ export default async function handler(req, res) {
       ${tracks
         .map((track, i) => {
           const y = i * 70 + 90;
-          var text = `${track.name} — ${track.artist}`;
-          if(text.length > 45) {
-            text = text.substring(0, 42) + '...';
+          var text = `${track.name} - ${track.artist}`;
+          if(text.length > 43) {
+            text = text.substring(0, 40) + '...';
           }
           return `
             <rect x="0" y="${y - 35}" width="400" height="60" fill="rgba(0, 0, 0, 0.04)" />
