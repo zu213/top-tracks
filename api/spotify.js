@@ -34,7 +34,7 @@ export default async function handler(req, res) {
       ${tracks
         .map((track, i) => {
           const y = i * 70 + 90;
-          var text = `${track.name} - ${track.artist}`;
+          var text = escapeXml(`${track.name} - ${track.artist}`);
           if(text.length > 43) {
             text = text.substring(0, 40) + '...';
           }
@@ -57,4 +57,14 @@ async function getAlbumImage(imageUrl) {
   const res = await fetch(imageUrl);
   const buffer = await res.buffer();
   return buffer.toString('base64');
+}
+
+function escapeXml(str) {
+  if (typeof str !== "string") return str;
+  return str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&apos;");
 }
